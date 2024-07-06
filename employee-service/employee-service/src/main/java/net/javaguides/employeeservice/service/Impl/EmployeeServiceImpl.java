@@ -1,5 +1,6 @@
 package net.javaguides.employeeservice.service.Impl;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import net.javaguides.employeeservice.dto.APIResponseDto;
 import net.javaguides.employeeservice.dto.DepartmentDto;
@@ -43,6 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return savedEmployeeDto;
     }
 
+    @CircuitBreaker(name="${spring.application.name}",fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeById(Long employeeId) {
 
@@ -69,4 +71,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         apiResponseDto.setDepartment(departmentDto);
         return apiResponseDto;
     }
+
+
+    public APIResponseDto getDefaultDepartment(Long employeeId, Exception exception) {
+
+        Employee employee=employeeRepository.findById(employeeId).get();
+
+        //Creating Default DepartmentDto for This FallBack Method & Deleting the REST API Call to the departmentDto
+        DepartmentDto departmentDto=new DepartmentDto();
+        departmentDto.setDepartmentName("R&D Department");
+        departmentDto.setDepartmentCode("RD001");
+        departmentDto.setDepartmentDescription("Research and Development Department");
+
+        EmployeeDto employeeDto=new EmployeeDto(
+                employee.getId(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail(),
+                employee.getDepartmentCode()
+        );
+
+        APIResponseDto apiResponseDto=new APIResponseDto();
+
+        apiResponseDto.setEmployee(employeeDto);
+        apiResponseDto.setDepartment(departmentDto);
+        return apiResponseDto;
+    }
+
+
 }
