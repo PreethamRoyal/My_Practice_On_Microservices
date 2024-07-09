@@ -4,16 +4,22 @@ package net.javaguides.organizationservice.controller;
 import lombok.AllArgsConstructor;
 import net.javaguides.organizationservice.dto.OrganizationDto;
 import net.javaguides.organizationservice.service.OrganizationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/organizations")
-@AllArgsConstructor
+
 public class OrganizationController {
 
+    @Autowired
     private OrganizationService organizationService;
+
+    public OrganizationController(OrganizationService organizationService) {
+        this.organizationService = organizationService;
+    }
 
     //Built Save Organization REST API
     @PostMapping

@@ -6,10 +6,11 @@ import net.javaguides.organizationservice.entity.Organization;
 import net.javaguides.organizationservice.mapper.OrganizationMapper;
 import net.javaguides.organizationservice.repository.OrganizationRepository;
 import net.javaguides.organizationservice.service.OrganizationService;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
-@Service
+@Component
 @AllArgsConstructor
 public class OrganizationServiceImpl implements OrganizationService {
 
